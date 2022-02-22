@@ -1,0 +1,1 @@
+docker run --name redis-test -p 6379:6379 -v /Users/zepenghan/workspace/github/study/nodejs-demo/redis/1.node-conn-redis/data:/data -v /Users/zepenghan/workspace/github/study/nodejs-demo/redis/1.node-conn-redis/redis.conf:/etc/redis/redis.conf -d redis redis-server /etc/redis/redis.conf
