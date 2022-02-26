@@ -1,23 +1,19 @@
-require('./apply');
-
 Function.prototype.bind2 = function(context) {
-    var args = [];
-    for (var i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
+    var self = this;
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    var fBind = function() {
+        var bindArgs = Array.prototype.slice.call(arguments);
+        return self.apply(this instanceof fBind ? this : context, args.concat(bindArgs));
     }
 
-    return function() {
-        var nextArgs = [];
-        for (var i = 0; i < arguments.length; i++) {
-            nextArgs.push(arguments[i]);
-        }
+    function Fnop() {}
 
-        nextArgs = nextArgs.concat(args);
+    Fnop.prototype = this.prototype;
 
-        const res = this.apply2(context, nextArgs);
+    fBind.prototype = new Fnop();
 
-        return res;
-    }
+    return fBind;
 }
 
 
@@ -35,14 +31,14 @@ var obj = {
     value: 1
 }
 
-console.log(testBind.bind(obj)() === 1);
-console.log(testBind.bind(obj)(1) === 2);
-console.log(testBind.bind(obj)(1, 2) === 4);
-console.log(testBind.bind(obj)(1, 2, 3) === 7);
+console.log(testBind.bind2(obj)() === 1);
+console.log(testBind.bind2(obj)(1) === 2);
+console.log(testBind.bind2(obj)(1, 2) === 4);
+console.log(testBind.bind2(obj)(1, 2, 3) === 7);
 
-console.log(testBind.bind(obj)() === 1);
-console.log(testBind.bind(obj, 1)(1) === 3);
-console.log(testBind.bind(obj, 1, 2)(1, 2) === 7);
-console.log(testBind.bind(obj, 1, 2, 3)(1, 2, 3) === 13);
+console.log(testBind.bind2(obj)() === 1);
+console.log(testBind.bind2(obj, 1)(1) === 3);
+console.log(testBind.bind2(obj, 1, 2)(1, 2) === 7);
+console.log(testBind.bind2(obj, 1, 2, 3)(1, 2, 3) === 13);
 
 
