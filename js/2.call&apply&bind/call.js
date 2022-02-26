@@ -11,6 +11,8 @@ Function.prototype.call2 = function(context) {
 
     var res = eval('context.fn(' + args + ')');
 
+    delete context.fn
+
     return res;
 }
 
