@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <style>
+            span {
+                display: inline-block;
+            }
+
+            .normal {
+                background-color: aqua;
+            }
+
+            .left {
+                position: relative;
+                margin-left: 50px;
+                background-color: blue;
+            }
+
+            .no {
+                position: relative;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 验证问题： relative 相对之前的正常定位元素定位 -->
+        <span class="normal">Who is the king?</span>
+        <span class="left">I am the King!</span>
+        <span class="no">No, you are not!</span>
+    </body>
+</html>
