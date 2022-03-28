@@ -189,6 +189,47 @@ class MyPromise {
             reject(reason);
         })
     }
+
+    static race(tasks) {
+        return new MyPromise((resolve, reject) => {
+            const realTasks = tasks.map(task => MyPromise.resolve(task));
+            if (realTasks.length === 0) {
+                return resolve();
+            }
+
+            for (let i = 0; i < realTasks.length; i++) {
+                realTasks.then(resolve, reject);
+            }
+        })
+    }
+
+    /**
+     * 
+     * @param {any[]} tasks 
+     */
+    static all(tasks) {
+        const realTasks = tasks.map(task => MyPromise.resolve(task));
+        return new MyPromise((resolve, reject) => {
+            if (!realTasks.length) {
+                return resolve();
+            }
+
+            const res = [];
+            let len = 0;
+            for (let i = 0; i < realTasks.length; i++) {
+                realTasks[i].then((value) => {
+                    res[i] = value;
+                    len++;
+
+                    if (len === realTasks.length) {
+                        resolve(res);
+                    }
+                }, (reason) => {
+                    reject(reason);
+                })
+            }
+        })
+    }
 }
 
 console.log('starting')
@@ -210,3 +251,16 @@ const p = new MyPromise((resolve, reject) => {
 });
 
 console.log('finished')
+
+MyPromise.all([MyPromise.resolve(3), MyPromise.resolve(2)]).then((value) => {
+    console.log('succ', value)
+}, (reason) => {
+    console.log('failed', reason);
+})
+
+
+MyPromise.all([MyPromise.resolve(3), MyPromise.reject(2)]).then((value) => {
+    console.log('succ', value)
+}, (reason) => {
+    console.log('failed', reason);
+})
