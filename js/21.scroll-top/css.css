@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+}
+
+.block {
+    height: 800px;
+}
+
+.color1 {
+    background-color: aqua;
+}
+
+.color2 {
+    background-color: aquamarine;
+}
+
+.color3 {
+    background-color: azure;
+}
+
+.color4 {
+    background-color: black;
+}
+
+.color5 {
+    background-color: blue;
+}
+
+.color6 {
+    background-color: blueviolet;
+}
+
+.color7 {
+    background-color: cadetblue;
+}
+
+.color8 {
+    background-color: chartreuse;
+}
