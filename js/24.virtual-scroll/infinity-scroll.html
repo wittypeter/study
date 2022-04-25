@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ceshi</title>
+        <style>
+            html, body {
+                margin: 0;
+            }
+
+            .container {
+                position: relative;
+                height: 100vh;
+                overflow: auto;
+                background-color: aqua;
+            }
+
+            .data-list {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .scroll {
+                position: absolute;
+                width: 100%;
+            }
+
+            .item {
+                width: 100%;
+                height: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" @scroll="onScroll($event)">
+            <div 
+                class="scroll"
+                :style="{ height: totalHeight + 'px' }"
+            >
+            </div>
+            <div class="data-list" :style="{ transform: `translateY(${scrollTopWithPX})` }">
+                <div class="item" v-for="item in visibleItems" :key="item.id">
+                    <span>{{ item.name }}</span>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+        <script>
+            const itemHeight = 50;
+            let index = 0;
+            const vm = new Vue({
+                el: '.container',
+                data() {
+                    return {
+                        scrollTop: 0,
+                        items: [],
+                        visibleCount: Math.floor(document.documentElement.clientHeight / itemHeight) + 1
+                    }
+                },
+                mounted() {
+                    this.items = this.generateData();
+                    console.log(this.items.length)
+                },
+                computed: {
+                    scrollTopWithPX() {
+                        return this.scrollTop + 'px';
+                    },
+                    totalHeight() {
+                        return this.items.length * itemHeight;
+                    },
+                    startIndex() {
+                        return Math.floor(this.scrollTop / itemHeight);
+                    },
+                    visibleItems() {
+                        return this.items.slice(this.startIndex, this.startIndex + this.visibleCount);
+                    }
+                },
+                methods: {
+                    generateData(num = 25) {
+                        const count = num;
+                        const res = [];
+                        for (let i = 0; i < count; i++) {
+                            res.push({
+                                id: 'id+' + index,
+                                name: `name: ${index++}`,
+                            })
+                        }
+                        return res;
+                    },
+                    onScroll(e) {
+                        this.scrollTop = e.target.scrollTop
+                        console.log(e.target.scrollHeight - e.target.scrollTop - document.documentElement.clientHeight);
+
+                        if (e.target.scrollHeight - e.target.scrollTop - document.documentElement.clientHeight < 100) {
+                            console.log('add')
+                            this.items.push(...this.generateData(10));
+                        }
+                    }
+                },
+            });
+        </script>
+    </body>
+</html>
