@@ -16,6 +16,8 @@ function get(obj, path, defaultValue) {
     return result === undefined ? defaultValue : result;
 }
 
+module.exports.get = get;
+
 const z = {
     a: 1,
     b: {
